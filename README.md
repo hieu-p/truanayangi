@@ -1,35 +1,54 @@
-# truanayangi
+# Trưa Nay Ăn Gì 🍜
 
-Vietnamese lunch case-opening parody. 36 meals, budget and vegetarian filters, original CS:GO sound assets, Google Maps search for the chosen meal. No payments or backend records.
+**Tiếng Việt** · [English](README.en.md)
 
-## Timing reference
+**Website chính thức: [truanayangi.com](https://truanayangi.com/)**
 
-The archived CS:GO Panorama client exposes a 2.3 s case-model lead-in plus 0.1 s scroll preparation, a 6 s scroll, cubic-bezier(0.075, 0.82, 0.165, 1), 38 decorative tiles, 42 fixed tick timestamps, and integer landing offsets from 10–90% of the winning tile. The web implementation uses a compositor-driven animation and hides all reel resets behind the case view.
+Chưa biết ăn gì trưa nay? Mở hòm, quay món và để bữa trưa có chút bất ngờ.
 
-References:
-- https://github.com/Desynci/CSGO_Panorama_Code.pbin/blob/main/panorama/scripts/popups/popup_capability_decodable.js
-- https://github.com/Desynci/CSGO_Panorama_Code.pbin/blob/main/panorama/styles/popups/popup_capability_decodable.css
-- https://www.csgo.com.cn/news/gamebroad/20170911/206155.html
+Đây là phiên bản cộng đồng chạy trên máy của bạn, không cần đăng nhập hay backend. Bạn có thể lọc món, thêm danh sách món riêng và lưu sở thích ngay trong trình duyệt.
 
-The 625:125:25:5:2 rarity weights reproduce the published standard weapon-case tier ratio. Items within a tier have equal probability. Filters remove unavailable tiers and renormalize the remaining weights. The winner is selected before animation; decorative cards never determine the result. Decorative neighbors avoid immediate repeats to reduce high-speed visual aliasing.
+## Chạy trên máy
 
-Rarity follows approximate VND price/person: blue ≤40k, purple ≤65k, pink ≤100k, red ≤130k, gold >130k.
+Cần **Node.js 22.12+** và phiên bản **pnpm** ghi trong [package.json](package.json).
 
-This is a browser adaptation, not Valve's engine or backend. The case lead-in is a 2D animation rather than the original 3D model animation. Food art, filtered pools and meal outcomes are intentionally different. Reduced-motion mode keeps timing but suppresses reel motion.
+```sh
+git clone https://github.com/truanayangi-com/truanayangi.git
+cd truanayangi
+pnpm install --frozen-lockfile
+pnpm start
+```
 
-## Assets
+Mở [127.0.0.1:5173](http://127.0.0.1:5173). Không cần tạo `.env` hay cấu hình dịch vụ bên ngoài. Nếu cổng đang bận, chạy `pnpm start --port 5188`.
 
-Food sheets and warehouse background: generated for this project.
-CS:GO SFX: Valve assets mirrored at https://github.com/sourcesounds/csgo/tree/master/sound/ui
-Case image: Steam economy image referenced by https://github.com/ByMykel/CSGO-API
+Các lệnh phát triển:
 
-## Development
+```sh
+pnpm test       # Chạy kiểm tra
+pnpm build      # Tạo bản build
+pnpm preview    # Xem bản build tại http://127.0.0.1:4173
+```
 
-npm install
-npm run dev
-npm run build
+Máy chủ chỉ lắng nghe trên `127.0.0.1`. Sau khi cài dependencies, ứng dụng tải tài nguyên từ máy; các liên kết bên ngoài chỉ mở khi bạn bấm vào.
 
+## Dữ liệu của bạn
 
-### Find or order the chosen meal
+Sở thích, danh sách món và lượt quay tự lưu bằng cookie trong trình duyệt hiện tại. Xóa cookie sẽ đặt lại dữ liệu; dữ liệu không đồng bộ giữa các thiết bị. Lượt quay hiển thị là của riêng trình duyệt này.
 
-The result links to Google Maps. On small screens or touch devices, a green GrabFood button opens the Vietnamese GrabFood search with the original dish name (including custom dishes). It uses the HTTPS search link tested on a real phone; app handoff depends on Grab and browser/device settings. There is no forced timer redirect, location request, or checkout integration. Google Maps remains available.
+Nếu cookie bị chặn hoặc danh sách món quá lớn, ứng dụng sẽ báo chưa lưu.
+
+## GitHub Pages và website chính
+
+GitHub Pages chỉ chuyển hướng đến https://truanayangi.com/. Đây là cách giữ chức năng đồng nhất: người truy cập luôn dùng cùng frontend production, API và cookie đăng nhập cùng origin, thay vì một ứng dụng tĩnh thứ hai dễ lệch tính năng hoặc mất đăng nhập khi tải lại. Chỉ xuất bản `pages-redirect/` lên `gh-pages`; không đưa bản build local lên đó. Các sửa đổi UI tĩnh và chuyển động vòng quay dùng chung cần được cập nhật đồng thời ở repo này và frontend production riêng tư.
+
+## Đóng góp
+
+Chào đón mọi người [báo lỗi, đề xuất ý tưởng](https://github.com/truanayangi-com/truanayangi/issues/new) hoặc fork repo và [gửi PR vào `main`](https://github.com/truanayangi-com/truanayangi/compare). Bạn có thể dùng tiếng Việt hoặc tiếng Anh, mở draft PR để trao đổi, không cần được duyệt issue trước hay tham gia tổ chức.
+
+Chỉ cần mô tả rõ thay đổi và cách đã kiểm tra. Với thay đổi code, hãy chạy test và build khi có thể; maintainer sẽ hỗ trợ và review trước khi merge. Giữ thông tin bí mật ngoài repo và ghi công nguồn sử dụng.
+
+## Nguồn gốc
+
+Repo được chuyển từ `nagisanzenin/truanayangi`, giữ nguyên lịch sử Git và đóng góp cộng đồng. Xem [ghi công tác giả và tài nguyên](ATTRIBUTION.md).
+
+[GitHub Pages](https://truanayangi-com.github.io/truanayangi/) chuyển hướng đến website chính thức. Chỉ thư mục `pages-redirect/` được xuất bản lên `gh-pages`; mã ứng dụng trong repo dành cho việc chạy trên máy.
