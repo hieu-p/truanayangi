@@ -1,7 +1,7 @@
 {
-  "name": "truanayangi",
+  "name": "truanayangi-personal-pages",
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

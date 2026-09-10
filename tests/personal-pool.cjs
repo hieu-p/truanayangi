@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict');const {buildSync}=require('esbuild');const {mkdtempSync,rmSync}=require('node:fs');const {tmpdir}=require('node:os');const {join}=require('node:path');
 const out=mkdtempSync(join(tmpdir(),'pool-test-'));try{
- buildSync({entryPoints:['src/lib/personal-pool.ts','src/lib/foods.ts'],outdir:out,bundle:true,platform:'node',format:'cjs'});
+ buildSync({entryPoints:[join(__dirname,'..','src','lib','personal-pool.ts'),join(__dirname,'..','src','lib','foods.ts')],outdir:out,bundle:true,platform:'node',format:'cjs'});
  const {emptyProfile,validateProfile,personalFoods,personalSelector}=require(join(out,'personal-pool.js'));const {foods}=require(join(out,'foods.js'));
  const all=foods.map(f=>f.image);assert.throws(()=>validateProfile({disabled:all,custom:[],revision:0}));assert.throws(()=>validateProfile({disabled:[999],custom:[],revision:0}));
  const p=validateProfile({disabled:all,custom:[{id:crypto.randomUUID(),name:'Solo',price:85,veg:true}],revision:0});const items=personalFoods(p);assert.equal(items.length,1);const s=personalSelector(items,50);assert.equal(s.expectedPrice,85);assert.equal(s.choose(items).name,'Solo');assert.equal(personalSelector([],50),null);

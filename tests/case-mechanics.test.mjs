@@ -2,13 +2,14 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {buildSync} from 'esbuild';
 import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
 import {mkdtempSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 
 const out=mkdtempSync(join(tmpdir(),'tnag-case-'));
 try{
- buildSync({entryPoints:['src/lib/case-mechanics.ts'],outfile:join(out,'case.cjs'),bundle:true,platform:'node',format:'cjs'});
+ buildSync({entryPoints:[fileURLToPath(new URL('../src/lib/case-mechanics.ts',import.meta.url))],outfile:join(out,'case.cjs'),bundle:true,platform:'node',format:'cjs'});
  const {createSpinProfile}=createRequire(import.meta.url)(join(out,'case.cjs'));
  test('normal motion keeps the deliberate case-opening pace',()=>{
   const profile=createSpinProfile(()=>.5,false);

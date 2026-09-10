@@ -2,12 +2,13 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {buildSync} from 'esbuild';
 import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
 import {mkdtempSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 const out=mkdtempSync(join(tmpdir(),'tnag-cookies-'));
 try{
- buildSync({entryPoints:['src/lib/cookies.ts'],outfile:join(out,'cookies.cjs'),bundle:true,platform:'node',format:'cjs',define:{'import.meta.env.BASE_URL':'"/truanayangi/"'}});
+ buildSync({entryPoints:[fileURLToPath(new URL('../src/lib/cookies.ts',import.meta.url))],outfile:join(out,'cookies.cjs'),bundle:true,platform:'node',format:'cjs',define:{'import.meta.env.BASE_URL':'"/truanayangi/"'}});
  const api=createRequire(import.meta.url)(join(out,'cookies.cjs'));
  let jar=new Map(),writes=[],blocked=false;
  globalThis.location={protocol:'https:'};
