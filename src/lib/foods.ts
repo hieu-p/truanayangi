@@ -163,14 +163,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Bún cá",
-    "sub": "Món ăn trưa",
-    "price": 40,
-    "image": 21,
-    "veg": false,
-    "quip": ""
-  },
-  {
     "name": "Gỏi cuốn",
     "sub": "Món ăn trưa",
     "price": 35,
@@ -290,13 +282,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Cơm gà xối mỡ",
-    "price": 55,
-    "image": 39,
-    "sub": "Phần ăn trưa / người",
-    "quip": ""
-  },
-  {
     "name": "Bún riêu",
     "price": 45,
     "image": 42,
@@ -360,13 +345,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Salad ức gà",
-    "price": 85,
-    "image": 51,
-    "sub": "Phần ăn trưa / người",
-    "quip": ""
-  },
-  {
     "name": "Mì Ý sốt kem bacon",
     "price": 115,
     "image": 52,
@@ -402,13 +380,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Cơm cá saba nướng",
-    "price": 110,
-    "image": 57,
-    "sub": "Phần ăn trưa / người",
-    "quip": ""
-  },
-  {
     "name": "Mì soba Nhật",
     "price": 110,
     "image": 58,
@@ -419,21 +390,6 @@ export const foods:Food[]=[
     "name": "Cơm cà ri Thái",
     "price": 110,
     "image": 59,
-    "sub": "Phần ăn trưa / người",
-    "quip": ""
-  },
-  {
-    "name": "Salad cá ngừ",
-    "price": 110,
-    "image": 60,
-    "sub": "Phần ăn trưa / người",
-    "quip": ""
-  },
-  {
-    "name": "Salad quinoa đậu gà",
-    "price": 115,
-    "image": 61,
-    "veg": true,
     "sub": "Phần ăn trưa / người",
     "quip": ""
   },
@@ -508,14 +464,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Phở gà",
-    "price": 55,
-    "sub": "Tô thường • Việt Nam",
-    "veg": false,
-    "image": 72,
-    "quip": ""
-  },
-  {
     "name": "Phở cuốn",
     "price": 70,
     "sub": "Phần 10 cuốn • Việt Nam",
@@ -569,14 +517,6 @@ export const foods:Food[]=[
     "sub": "Tô thường • Việt Nam",
     "veg": false,
     "image": 79,
-    "quip": ""
-  },
-  {
-    "name": "Miến gà",
-    "price": 55,
-    "sub": "Tô thường • Việt Nam",
-    "veg": false,
-    "image": 80,
     "quip": ""
   },
   {
@@ -657,14 +597,6 @@ export const foods:Food[]=[
     "sub": "Một niêu / người",
     "veg": false,
     "image": 90,
-    "quip": ""
-  },
-  {
-    "name": "Cơm gà Hải Nam",
-    "price": 75,
-    "sub": "Gà luộc & cơm thơm",
-    "veg": false,
-    "image": 91,
     "quip": ""
   },
   {
@@ -756,22 +688,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Cà ri Ấn Độ & naan",
-    "price": 220,
-    "sub": "Cà ri gà kèm bánh naan",
-    "veg": false,
-    "image": 103,
-    "quip": ""
-  },
-  {
-    "name": "Cơm biryani",
-    "price": 190,
-    "sub": "Cơm gia vị & gà • Ấn Độ",
-    "veg": false,
-    "image": 104,
-    "quip": ""
-  },
-  {
     "name": "Bánh xèo Nhật",
     "price": 110,
     "sub": "Okonomiyaki • Nhật Bản",
@@ -820,38 +736,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Quesadilla",
-    "price": 140,
-    "sub": "Phô mai & gà • Mexico",
-    "veg": false,
-    "image": 111,
-    "quip": ""
-  },
-  {
-    "name": "Fish & chips",
-    "price": 170,
-    "sub": "Cá chiên & khoai tây",
-    "veg": false,
-    "image": 112,
-    "quip": ""
-  },
-  {
-    "name": "Gà nướng kèm khoai tây",
-    "price": 140,
-    "sub": "Phần một người",
-    "veg": false,
-    "image": 113,
-    "quip": ""
-  },
-  {
-    "name": "Mac & cheese",
-    "price": 150,
-    "sub": "Nui phô mai • Phần chính",
-    "veg": false,
-    "image": 114,
-    "quip": ""
-  },
-  {
     "name": "Mì Ý pesto",
     "price": 170,
     "sub": "Húng quế & gà • Ý",
@@ -883,27 +767,12 @@ export const foods:Food[]=[
     "image": 118,
     "quip": ""
   },
-  {
-    "name": "Falafel kèm pita",
-    "price": 150,
-    "sub": "Đậu gà, rau & bánh pita",
-    "veg": true,
-    "image": 119,
-    "quip": ""
-  },
 {
   "name": "Nui xào bò",
   "price": 50,
   "sub": "Nui, bò & rau • Việt Nam",
   "quip": "Nui deadline lại. Ăn trước đã.",
   "image": 120
-},
-{
-  "name": "Cháo gà",
-  "price": 45,
-  "sub": "Gà xé & hành tiêu • Việt Nam",
-  "quip": "Một bát hồi máu giữa giờ làm.",
-  "image": 121
 },
 {
   "name": "Bò kho bánh mì",
