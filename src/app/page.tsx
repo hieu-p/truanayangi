@@ -10,7 +10,7 @@ import { personalFoods, personalSelector } from '@/lib/personal-pool';
 import { CaseAudio } from '@/lib/case-audio';
 import { flushSync } from 'react-dom';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowUpRight, AudioLines, Volume2, VolumeX, Sparkles, Utensils, Leaf } from 'lucide-react';
+import { ArrowUpRight, AudioLines, Volume2, VolumeX, Sparkles, Utensils, Leaf, Coffee, Cookie } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
@@ -19,8 +19,38 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 
 const colors=['#4b69ff','#8847ff','#d32ce6','#eb4b4b','#e4ae39'];
+type RollType='main'|'drinks'|'snacks';
+const drinkFoods:Food[]=[
+ {customId:'drink-ca-phe-sua',name:'Cà phê sữa',sub:'Đồ uống',price:30,rarity:0,image:-1,quip:'Tỉnh táo cho ca chiều.'},
+ {customId:'drink-tra-dao',name:'Trà đào',sub:'Đồ uống',price:35,rarity:0,image:-1,veg:true,quip:'Mát một nhịp, vui cả chiều.'},
+ {customId:'drink-tra-sua',name:'Trà sữa',sub:'Đồ uống',price:45,rarity:1,image:-1,quip:'Thêm trân châu, bớt phân vân.'},
+ {customId:'drink-nuoc-ep',name:'Nước ép trái cây',sub:'Đồ uống',price:45,rarity:1,image:-1,veg:true,quip:'Một ngụm tươi mới.'},
+ {customId:'drink-sinh-to',name:'Sinh tố',sub:'Đồ uống',price:50,rarity:2,image:-1,veg:true,quip:'Xay mịn cả deadline.'},
+ {customId:'drink-matcha',name:'Matcha latte',sub:'Đồ uống',price:60,rarity:3,image:-1,quip:'Xanh nhưng không non.'},
+];
+const snackFoods:Food[]=[
+ {customId:'snack-banh-trang',name:'Bánh tráng trộn',sub:'Ăn vặt',price:30,rarity:0,image:-1,quip:'Trộn đều rồi chiến.'},
+ {customId:'snack-khoai-tay',name:'Khoai tây chiên',sub:'Ăn vặt',price:40,rarity:0,image:-1,veg:true,quip:'Giòn tan, hết lăn tăn.'},
+ {customId:'snack-xien-que',name:'Xiên que',sub:'Ăn vặt',price:45,rarity:1,image:-1,quip:'Một xiên chưa bao giờ đủ.'},
+ {customId:'snack-ga-vien',name:'Gà viên',sub:'Ăn vặt',price:50,rarity:1,image:-1,quip:'Nhỏ nhưng có võ.'},
+ {customId:'snack-banh-ngot',name:'Bánh ngọt',sub:'Ăn vặt',price:55,rarity:2,image:-1,veg:true,quip:'Ngọt một chút cho ngày dễ chịu.'},
+ {customId:'snack-combo',name:'Combo ăn vặt',sub:'Ăn vặt',price:75,rarity:3,image:-1,quip:'Kèo lớn cho hội bạn.'},
+];
+const extraEmoji:Record<string,string>={
+ 'drink-ca-phe-sua':'☕','drink-tra-dao':'🍑','drink-tra-sua':'🧋','drink-nuoc-ep':'🍹','drink-sinh-to':'🥤','drink-matcha':'🍵',
+ 'snack-banh-trang':'🥗','snack-khoai-tay':'🍟','snack-xien-que':'🍢','snack-ga-vien':'🍗','snack-banh-ngot':'🧁','snack-combo':'🍿',
+};
+function categoryName(food:Food,language:Language){
+ const name=food.name.toLocaleLowerCase('vi');
+ if(/bánh mì|cuốn|kebab|sandwich|burrito|taco|quesadilla/.test(name))return language==='vi'?'Bánh mì & cuốn':'Bread & wraps';
+ if(/cơm|xôi|bibimbap|biryani|risotto/.test(name))return language==='vi'?'Cơm & xôi':'Rice dishes';
+ if(/bún|phở|mì|miến|hủ tiếu|ramen|udon|soba|gnocchi/.test(name))return language==='vi'?'Bún, phở & mì':'Noodles';
+ if(/cháo|lẩu|canh|cà ri/.test(name))return language==='vi'?'Lẩu & cháo':'Soup & hot pot';
+ if(/salad|gỏi|poke|falafel/.test(name))return language==='vi'?'Salad & món nhẹ':'Salad & light meals';
+ return language==='vi'?'Món quốc tế':'International';
+}
 function FoodImage({food,language}:{food:Food;language:Language}){
- if(food.customId)return <div className="food-image custom-food-art" role="img" aria-label={food.name}><Utensils size={64}/></div>;
+ if(food.customId)return <div className="food-image custom-food-art" role="img" aria-label={food.name}>{extraEmoji[food.customId]?<span className="extra-emoji">{extraEmoji[food.customId]}</span>:<Utensils size={64}/>}</div>;
  const common=food.image>=120,lunch=food.image>=72&&!common,expanded=food.image>=36;
  const index=common?(food.image-120)%12:lunch?(food.image-72)%12:expanded?(food.image-36)%12:food.image%4;
  const atlas=common?`food-common-${Math.floor((food.image-120)/12)}`:lunch?`food-lunch-${Math.floor((food.image-72)/12)}`:expanded?`food-expanded-${Math.floor((food.image-36)/12)}`:`food-hd-${Math.floor(food.image/4)}`;
@@ -40,11 +70,14 @@ function MysteryArt({language}:{language:Language}){return <div className="myste
 </div>}
 const Card=memo(function Card({food,language,small=false,slot}:{food:Food;language:Language;small?:boolean;slot?:number}){const mystery=!small&&food.rarity===4,t=copy[language];return <div className={`food-card ${small?'small':''} ${mystery?'mystery-card':''}`} data-slot-id={slot} data-food-id={food.image} style={{'--rarity':colors[food.rarity],...(slot===undefined?{}:{position:'absolute',left:slot*254})} as React.CSSProperties}><span className="tier">{t.tiers[food.rarity]}</span>{mystery?<MysteryArt language={language}/>:<FoodImage food={food} language={language}/>}<div className="card-copy"><strong>{mystery?t.mystery:foodName(food,language)}</strong><span>{small?priceLabel(food.price,language,true):foodSubtitle(food,language)}</span></div></div>});
 
+const CatalogCard=memo(function CatalogCard({food,language}:{food:Food;language:Language}){const t=copy[language];return <article className="catalog-card" style={{'--rarity':colors[food.rarity]} as React.CSSProperties}><div className="catalog-art"><FoodImage food={food} language={language}/>{food.veg&&<span className="veg-badge"><Leaf size={12}/>{language==='vi'?'Chay':'Veg'}</span>}</div><span className="catalog-category">{categoryName(food,language)}</span><h3>{foodName(food,language)}</h3><div className="catalog-meta"><strong>{priceLabel(food.price,language,true)}</strong><span>{t.tiers[food.rarity]}</span></div></article>});
+
 export default function Home(){
  const {count:localSpins,enabled:counterEnabled,recordSpin}=useLocalSpinCount();
  const [language,setLanguage]=useState<Language>('vi');
  const preferences=usePreferences();
- const [budget,setBudget]=useState('50'),[custom,setCustom]=useState('50'),[veg,setVeg]=useState(false),[sound,setSound]=useState(true),[spinning,setSpinning]=useState(false),[result,setResult]=useState<Food|null>(null),[revealed,setRevealed]=useState(false);
+ const [budget,setBudget]=useState('50'),[custom,setCustom]=useState('50'),[veg,setVeg]=useState(false),[sound,setSound]=useState(true),[rollType,setRollType]=useState<RollType>('main'),[spinning,setSpinning]=useState(false),[result,setResult]=useState<Food|null>(null),[revealed,setRevealed]=useState(false);
+ const [catalogCategory,setCatalogCategory]=useState('all'),[catalogSort,setCatalogSort]=useState('price-asc');
  const [reel,setReel]=useState(()=>foods.slice(0,12).map((food,id)=>({food,id}))),[moving,setMoving]=useState(false);
  const busy=useRef(false),viewport=useRef<HTMLDivElement>(null);
  useEffect(()=>{let selected:Language='vi';try{const saved=readCookie<string>('language');selected=saved==='en'||saved==='vi'?saved:'vi'}catch{}setLanguage(selected);document.documentElement.lang=selected;document.title=selected==='en'?'What should I eat for lunch?':'Trưa nay ăn gì?'},[]);
@@ -56,7 +89,8 @@ export default function Home(){
  useEffect(()=>{if(preferencesReady){try{writeCookie('settings',{budget,custom,veg,sound});setCookieError('')}catch{setCookieError(language==='vi'?'Không thể lưu cookie. Lựa chọn chỉ giữ trong lần mở trang này.':'Cookies unavailable. Preferences last only for this visit.')}}},[preferencesReady,budget,custom,veg,sound,language]);
  const target=budget==='custom'?Number(custom):Number(budget);
  const validTarget=Number.isInteger(target)&&target>=30&&target<=180;
- const population=useMemo(()=>personalFoods(preferences.profile),[preferences.profile]);
+ const mainPopulation=useMemo(()=>personalFoods(preferences.profile),[preferences.profile]);
+ const population=rollType==='main'?mainPopulation:rollType==='drinks'?drinkFoods:snackFoods;
  useEffect(()=>{const last=readCookie<{name?:unknown;price?:unknown;veg?:unknown}>('last-choice');if(last&&typeof last==='object'){const match=population.find(f=>f.name===last.name&&f.price===last.price&&!!f.veg===last.veg);if(match)setResult(match)}},[population]);
  const eligible=useMemo(()=>population.filter(f=>!veg||f.veg),[population,veg]);
  const lunchSelector=useMemo(()=>personalSelector(eligible,validTarget?target:50),[eligible,target,validTarget]);
@@ -71,7 +105,8 @@ export default function Home(){
  },[]);
  const [visibleStart,setVisibleStart]=useState(0);
  const t=copy[language];
- const inventoryCards=useMemo(()=>[...eligible].sort((a,b)=>a.rarity-b.rarity||a.price-b.price||foodName(a,language).localeCompare(foodName(b,language),language)).map(f=><Card food={f} language={language} small key={f.customId??f.image}/>),[eligible,language]);
+ const catalogCategories=useMemo(()=>[...new Set(mainPopulation.map(food=>categoryName(food,language)))].sort((a,b)=>a.localeCompare(b,language)),[mainPopulation,language]);
+ const inventoryCards=useMemo(()=>mainPopulation.filter(food=>(!veg||food.veg)&&(catalogCategory==='all'||categoryName(food,language)===catalogCategory)).sort((a,b)=>catalogSort==='price-desc'?b.price-a.price:catalogSort==='name'?foodName(a,language).localeCompare(foodName(b,language),language):a.price-b.price).map(f=><CatalogCard food={f} language={language} key={f.customId??f.image}/>),[mainPopulation,veg,catalogCategory,catalogSort,language]);
 
  const track=useRef<HTMLDivElement>(null);
  const position=useRef(-400);
@@ -138,14 +173,14 @@ export default function Home(){
  </a><div className="header-actions"><PreferencesPanel preferences={preferences} language={language} disabled={spinning}/><button className="language-button" onClick={()=>changeLanguage(language==='vi'?'en':'vi')} aria-label={t.language}>{language==='vi'?'EN':'VI'}</button><button className="sound-button" onClick={()=>{audio.current?.setMuted(sound);setSound(!sound)}} aria-label={sound?t.turnSoundOff:t.turnSoundOn}>{sound?<Volume2 size={18}/>:<VolumeX size={18}/>}<span>{sound?t.soundOn:t.soundOff}</span></button><a className="social-button facebook-button" href="https://www.facebook.com/share/g/19S49GH46A/" target="_blank" rel="noreferrer" aria-label={language==='vi'?'Tham gia nhóm Facebook Trưa Nay Ăn Gì':'Join the Trưa Nay Ăn Gì Facebook group'}><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.2 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H8V13h2.8v8h3.4Z"/></svg><span>Facebook</span></a><a className="github-button" href="https://github.com/truanayangi-com/truanayangi" target="_blank" rel="noreferrer" aria-label={t.github}><svg className="github-mark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.23c0 4.52 2.87 8.35 6.84 9.71.5.1.68-.22.68-.49v-1.91c-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .08 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.66.35-1.12.64-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.96a9.3 9.3 0 0 1 2.5.35c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.89v2.8c0 .27.18.59.69.49A10.25 10.25 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z"/></svg><span className="github-label">GitHub</span></a></div></header>
  <main><>{cookieError&&<p role="status" className="preferences-message">{cookieError}</p>}<div className="intro"><h1>{t.title}</h1></div>
  {!eligible.length&&<p className="preferences-message">{language==='vi'?'Pool không có món phù hợp. Tắt bộ lọc chay hoặc thêm món.':'No matching dishes. Turn off the vegetarian filter or add dishes.'}</p>}
- {counterEnabled&&<p className="local-counter" title={language==='vi'?'Lượt mở trên trình duyệt này, lưu bằng cookie':'Spins on this browser, stored in cookies'}>{language==='vi'?'Bạn đã mở':'You have opened'} <strong>{localSpins===null?'—':new Intl.NumberFormat(language==='vi'?'vi-VN':'en-US').format(localSpins)}</strong> {language==='vi'?'hòm trên trình duyệt này':'cases on this browser'}</p>}
+ {counterEnabled&&<p className="local-counter" title={language==='vi'?'Lượt mở trên trình duyệt này, lưu bằng cookie':'Spins on this browser, stored in cookies'}>{language==='vi'?'Đã mở':'Opened'} <strong>{localSpins===null?'—':new Intl.NumberFormat(language==='vi'?'vi-VN':'en-US').format(localSpins)}</strong> {language==='vi'?'hòm trên trình duyệt này':'cases on this browser'}</p>}
  {result&&!spinning&&<p className="local-counter">{language==='vi'?'Lựa chọn gần nhất: ':'Last choice: '}<strong>{foodName(result,language)}</strong></p>}
  <section className="case-panel" aria-label={t.caseLabel}>
  <div className={`reel-window ${moving?'is-spinning':''} `} ref={viewport}><div className="selector-line"/><div className="reel-track" ref={attachTrack}>{reel.filter(({id})=>id>=visibleStart&&id<visibleStart+12).map(({food,id})=><Card key={id} food={food} language={language} slot={id}/>)}</div><div className="reel-fade left"/><div className="reel-fade right"/></div></section>
- <div className="control-bar"><div className="filters"><div className="budget"><label id="budget-label">{t.spend}</label><Select value={budget} onValueChange={v=>setBudget(v??'50')} disabled={spinning}><SelectTrigger aria-labelledby="budget-label"><SelectValue>{budget==='custom'?t.custom:priceLabel(budget,language)}</SelectValue></SelectTrigger><SelectContent>{['35','50','75','100','150'].map(v=><SelectItem key={v} value={v}>{priceLabel(v,language)}</SelectItem>)}<SelectItem value="custom">{t.custom}</SelectItem></SelectContent></Select>{budget==='custom'&&<div className="custom-spend"><input aria-label={t.customSpend} aria-invalid={!validTarget} type="number" inputMode="numeric" min="30" max="180" step="1" value={custom} disabled={spinning} onChange={e=>setCustom(e.target.value)}/><span>{t.thousandPerMeal}</span></div>}{!validTarget&&<small className="spend-note" role="alert">{t.spendError}</small>}{validTarget&&eligible.length>0&&(veg||Math.abs(filteredMean-target)>.5)&&<small className="spend-note">{t.vegetarianPool} {priceLabel(Math.round(filteredMean),language,true)} / {language==='vi'?'bữa':'meal'}</small>}</div><label className="veg"><Switch checked={veg} onCheckedChange={setVeg} disabled={spinning} aria-label={t.vegetarianOnly}/><span><Leaf size={15}/> {t.vegetarian}</span></label></div><div className="open-wrap"><button className="open-button" disabled={spinning||!validTarget||!eligible.length} onClick={open}>{spinning?<AudioLines size={22}/>:<Sparkles size={21}/>} {spinning?t.opening:result?t.openAgain:t.open} <span>↗</span></button></div></div>
+ <section className="choice-panel" aria-label={language==='vi'?'Chọn và quay':'Choose and spin'}><div className="meal-tabs" role="group" aria-label={language==='vi'?'Loại vòng quay':'Spin category'}><button className={rollType==='main'?'active':''} onClick={()=>setRollType('main')} disabled={spinning}><Utensils size={17}/>{language==='vi'?'Món chính':'Main dishes'}</button><button className={rollType==='drinks'?'active':''} onClick={()=>setRollType('drinks')} disabled={spinning}><Coffee size={17}/>{language==='vi'?'Đồ uống':'Drinks'}</button><button className={rollType==='snacks'?'active':''} onClick={()=>setRollType('snacks')} disabled={spinning}><Cookie size={17}/>{language==='vi'?'Ăn vặt':'Snacks'}</button></div><div className="choice-row"><div className="budget"><label id="budget-label">{language==='vi'?'Ngân sách':'Budget'}</label><Select value={budget} onValueChange={v=>setBudget(v??'50')} disabled={spinning}><SelectTrigger aria-labelledby="budget-label"><SelectValue>{budget==='custom'?t.custom:`${budget}k`}</SelectValue></SelectTrigger><SelectContent>{['35','50','75','100','150'].map(v=><SelectItem key={v} value={v}>{v}k</SelectItem>)}<SelectItem value="custom">{t.custom}</SelectItem></SelectContent></Select>{budget==='custom'&&<div className="custom-spend"><input aria-label={t.customSpend} aria-invalid={!validTarget} type="number" inputMode="numeric" min="30" max="180" step="1" value={custom} disabled={spinning} onChange={e=>setCustom(e.target.value)}/><span>{t.thousandPerMeal}</span></div>}{!validTarget&&<small className="spend-note" role="alert">{t.spendError}</small>}{validTarget&&eligible.length>0&&Math.abs(filteredMean-target)>.5&&<small className="spend-note">≈ {priceLabel(Math.round(filteredMean),language,true)}</small>}</div><div className="open-wrap"><button className="open-button" disabled={spinning||!validTarget||!eligible.length} onClick={open}>{spinning?<AudioLines size={22}/>:<Sparkles size={21}/>} {spinning?t.opening:result?t.openAgain:t.open}</button></div></div></section>
  <Dialog open={revealed} onOpenChange={setRevealed}><DialogContent className="winner-dialog" showCloseButton={false}>{result&&<><span className="winner-label">{t.newItem}</span><DialogTitle className="winner-title">{foodName(result,language)}</DialogTitle><DialogDescription className="winner-description">{t.referencePrice} · {priceLabel(result.price,language,true)} {t.perPerson}</DialogDescription><div className="winner-art" style={{'--rarity':colors[result.rarity]} as React.CSSProperties}><FoodImage food={result} language={language}/></div><div className="winner-actions"><a className="find-button" href={`https://www.google.com/maps/search/${encodeURIComponent(result.name+' '+t.nearby)}`} target="_blank" rel="noreferrer">{t.find} <ArrowUpRight size={16}/></a><a className="grabfood-button" href={`https://food.grab.com/vn/vi/restaurants?${new URLSearchParams({search:result.name,'support-deeplink':'true',searchParameter:result.name})}`} target="_blank" rel="noreferrer" aria-label={language==='vi'?`Đặt ${result.name} qua GrabFood`:`Find ${foodName(result,language)} on GrabFood`}><span className="grabfood-label">{language==='vi'?'Đặt qua':'Order on'} <strong>GrabFood</strong></span><ArrowUpRight size={17} aria-hidden="true"/></a><button onClick={()=>setRevealed(false)}>{t.continue}</button></div></>}</DialogContent></Dialog>
 
- <section className="inventory"><div className="section-heading"><div><span className="eyebrow">{t.whatsInside}</span><div className="inventory-title-row"><h2>{t.items} <span>{eligible.length.toString().padStart(2,'0')}</span></h2><PreferencesPanel preferences={preferences} language={language} disabled={spinning} variant="inventory"/></div></div><div className="rarity-legend">{t.tiers.map((tier,i)=><span key={tier}><i style={{background:colors[i]}}/>{tier}</span>)}</div></div><div className="inventory-grid">{inventoryCards}</div></section>
+ <section className="inventory catalog-section"><span className="eyebrow">{language==='vi'?'KHÁM PHÁ THEO KHẨU VỊ':'EXPLORE BY TASTE'}</span><div className="catalog-heading"><div className="inventory-title-row"><h2>{language==='vi'?'Hôm nay bạn thèm gì?':'What are you craving today?'}</h2><PreferencesPanel preferences={preferences} language={language} disabled={spinning} variant="inventory"/></div><div className="catalog-tools"><label className="catalog-veg"><Switch checked={veg} onCheckedChange={setVeg} disabled={spinning} aria-label={t.vegetarianOnly}/><span><Leaf size={14}/>{language==='vi'?'Chay':'Vegetarian'}</span></label><select aria-label={language==='vi'?'Danh mục':'Category'} value={catalogCategory} onChange={event=>setCatalogCategory(event.target.value)}><option value="all">{language==='vi'?'Tất cả danh mục':'All categories'}</option>{catalogCategories.map(category=><option key={category}>{category}</option>)}</select><select aria-label={language==='vi'?'Sắp xếp':'Sort'} value={catalogSort} onChange={event=>setCatalogSort(event.target.value)}><option value="price-asc">{language==='vi'?'Giá: thấp → cao':'Price: low → high'}</option><option value="price-desc">{language==='vi'?'Giá: cao → thấp':'Price: high → low'}</option><option value="name">{language==='vi'?'Tên: A → Z':'Name: A → Z'}</option></select></div></div><div className="inventory-grid catalog-grid">{inventoryCards}</div></section>
 
  </><footer><span>Trưa Nay Ăn Gì · <a href={`${basePath}/privacy.html`}>{language==='vi'?'Quyền riêng tư':'Privacy'}</a> · <a href={`${basePath}/terms.html`}>{language==='vi'?'Điều khoản':'Terms'}</a></span><span>{t.footer} <a href="https://github.com/sourcesounds/csgo" target="_blank" rel="noreferrer">SourceSounds</a></span></footer>
  </main></div>
