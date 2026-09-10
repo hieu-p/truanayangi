@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
-    "build:pages": "tsc -b && vite build --base /truanayangi/ --outDir dist-pages",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/cookies.test.mjs tests/case-mechanics.test.mjs && node tests/personal-pool.cjs",
     "typecheck": "tsc --noEmit",
