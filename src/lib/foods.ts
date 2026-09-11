@@ -10,6 +10,13 @@ export const foods:Food[]=[
     "quip": "Sườn có thể gãy. Kèo này thì không."
   },
   {
+    "name": "Cơm tấm Long Xuyên",
+    "sub": "Sườn bì chả • Việt Nam",
+    "price": 45,
+    "image": 0,
+    "quip": "Sườn có thể gãy. Kèo này thì không."
+  },
+  {
     "name": "Phở bò",
     "sub": "Tái nạm • Việt Nam",
     "price": 55,
@@ -67,14 +74,6 @@ export const foods:Food[]=[
     "quip": "Trộn cơm. Đừng trộn deadline."
   },
   {
-    "name": "Cơm gà Hội An",
-    "sub": "Món ăn trưa",
-    "price": 45,
-    "image": 9,
-    "veg": false,
-    "quip": ""
-  },
-  {
     "name": "Bún bò Huế",
     "sub": "Món ăn trưa",
     "price": 50,
@@ -86,6 +85,14 @@ export const foods:Food[]=[
     "name": "Hủ tiếu",
     "sub": "Món ăn trưa",
     "price": 40,
+    "image": 11,
+    "veg": false,
+    "quip": ""
+  },
+  {
+    "name": "Hủ tiếu nam vang",
+    "sub": "Món ăn trưa",
+    "price": 50,
     "image": 11,
     "veg": false,
     "quip": ""
@@ -199,14 +206,6 @@ export const foods:Food[]=[
     "sub": "Món ăn trưa",
     "price": 90,
     "image": 26,
-    "veg": false,
-    "quip": ""
-  },
-  {
-    "name": "Tteokbokki",
-    "sub": "Món ăn trưa",
-    "price": 65,
-    "image": 27,
     "veg": false,
     "quip": ""
   },
@@ -712,14 +711,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Bánh cuộn gà",
-    "price": 95,
-    "sub": "Chicken wrap",
-    "veg": false,
-    "image": 108,
-    "quip": ""
-  },
-  {
     "name": "Burrito",
     "price": 150,
     "sub": "Cuộn cơm, đậu & thịt • Mexico",
@@ -752,22 +743,6 @@ export const foods:Food[]=[
     "quip": ""
   },
   {
-    "name": "Cơm risotto",
-    "price": 260,
-    "sub": "Cơm Ý • Phần chính",
-    "veg": false,
-    "image": 117,
-    "quip": ""
-  },
-  {
-    "name": "Gnocchi",
-    "price": 250,
-    "sub": "Bánh khoai tây kiểu Ý",
-    "veg": false,
-    "image": 118,
-    "quip": ""
-  },
-{
   "name": "Nui xào bò",
   "price": 50,
   "sub": "Nui, bò & rau • Việt Nam",
@@ -849,10 +824,6 @@ export const foods:Food[]=[
   quip: "", atlas: "food-chinese-0", position: "0% 0%", atlasSize: "200% 200%"
 },
 {
-  customId: "main-com-ga-kung-pao", name: "Cơm gà Kung Pao", sub: "Cơm & xôi", price: 95, image: 133,
-  quip: "", atlas: "food-chinese-0", position: "100% 0%", atlasSize: "200% 200%"
-},
-{
   customId: "main-mi-dan-dan", name: "Mì Dan Dan Tứ Xuyên", sub: "Bún, phở & mì", price: 160, image: 134,
   quip: "", atlas: "food-chinese-0", position: "0% 100%", atlasSize: "200% 200%"
 },
@@ -863,18 +834,6 @@ export const foods:Food[]=[
 {
   customId: "main-com-heo-jeyuk", name: "Cơm heo xào cay Jeyuk", sub: "Cơm & xôi", price: 100, image: 136,
   quip: "", atlas: "food-korean-0", position: "0% 0%", atlasSize: "200% 200%"
-},
-{
-  customId: "main-ga-ham-sam", name: "Gà hầm sâm Samgyetang", sub: "Lẩu & cháo", price: 250, image: 137,
-  quip: "", atlas: "food-korean-0", position: "100% 0%", atlasSize: "200% 200%"
-},
-{
-  customId: "main-canh-suon-bo-galbitang", name: "Canh sườn bò Galbitang kèm cơm", sub: "Lẩu & cháo", price: 270, image: 138,
-  quip: "", atlas: "food-korean-0", position: "0% 100%", atlasSize: "200% 200%"
-},
-{
-  customId: "main-mi-kalguksu", name: "Mì Kalguksu hải sản", sub: "Bún, phở & mì", price: 150, image: 139,
-  quip: "", atlas: "food-korean-0", position: "100% 100%", atlasSize: "200% 200%"
 },
 {
   customId: "main-com-omurice", name: "Cơm cuộn trứng Omurice", sub: "Cơm & xôi", price: 75, image: 140,
@@ -888,20 +847,4 @@ export const foods:Food[]=[
   customId: "main-com-hambagu", name: "Cơm thịt băm Hambagu", sub: "Cơm & xôi", price: 120, image: 142,
   quip: "", atlas: "food-japanese-0", position: "0% 100%", atlasSize: "200% 200%"
 },
-{
-  customId: "main-com-ochazuke", name: "Cơm trà cá hồi Ochazuke", sub: "Cơm & xôi", price: 100, image: 143,
-  quip: "", atlas: "food-japanese-0", position: "100% 100%", atlasSize: "200% 200%"
-},
-{
-  customId: "main-masala-dosa", name: "Masala dosa", sub: "Bánh mì & cuốn", price: 115, image: 144, veg: true, quip: ""
-},
-{
-  customId: "main-chole-bhature", name: "Chole bhature", sub: "Bánh mì & cuốn", price: 165, image: 145, veg: true, quip: ""
-},
-{
-  customId: "main-palak-paneer", name: "Palak paneer kèm cơm", sub: "Cơm & xôi", price: 200, image: 146, veg: true, quip: ""
-},
-{
-  customId: "main-ga-tandoori", name: "Gà tandoori kèm naan", sub: "Nướng & chiên", price: 220, image: 147, quip: ""
-}
 ].map(food=>({...food,rarity:priceRarity(food.price)}));
