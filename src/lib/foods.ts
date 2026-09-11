@@ -1,5 +1,5 @@
 import { priceRarity } from './case-mechanics';
-export type Food={customId?:string;name:string;sub:string;price:number;rarity:number;image:number;veg?:boolean;quip:string;atlas?:string;position?:string;atlasSize?:string};
+export type Food={customId?:string;name:string;sub:string;price:number;rarity:number;image:number;sourceImage?:number;veg?:boolean;quip:string;atlas?:string;position?:string;atlasSize?:string};
 // Approximate lunch portion prices in thousands of VND, not restaurant quotes.
 export const foods:Food[]=[
   {
@@ -13,7 +13,8 @@ export const foods:Food[]=[
     "name": "Cơm tấm Long Xuyên",
     "sub": "Sườn bì chả • Việt Nam",
     "price": 45,
-    "image": 0,
+    "image": 148,
+    "sourceImage": 0,
     "quip": "Sườn có thể gãy. Kèo này thì không."
   },
   {
@@ -93,7 +94,8 @@ export const foods:Food[]=[
     "name": "Hủ tiếu nam vang",
     "sub": "Món ăn trưa",
     "price": 50,
-    "image": 11,
+    "image": 149,
+    "sourceImage": 11,
     "veg": false,
     "quip": ""
   },

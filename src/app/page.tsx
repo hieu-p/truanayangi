@@ -183,9 +183,10 @@ function categoryName(food:Food,language:Language){
 function FoodImage({food,language}:{food:Food;language:Language}){
  if(food.atlas)return <div className="food-image" role="img" aria-label={food.name} style={{backgroundImage:`url(${basePath}/${food.atlas}.webp)`,backgroundSize:food.atlasSize??'400% 300%',backgroundPosition:food.position}}/>;
  if(food.customId)return <div className="food-image custom-food-art" role="img" aria-label={food.name}><Utensils size={64}/></div>;
- const common=food.image>=120,lunch=food.image>=72&&!common,expanded=food.image>=36;
- const index=common?(food.image-120)%12:lunch?(food.image-72)%12:expanded?(food.image-36)%12:food.image%4;
- const atlas=common?`food-common-${Math.floor((food.image-120)/12)}`:lunch?`food-lunch-${Math.floor((food.image-72)/12)}`:expanded?`food-expanded-${Math.floor((food.image-36)/12)}`:`food-hd-${Math.floor(food.image/4)}`;
+ const image=food.sourceImage??food.image;
+ const common=image>=120,lunch=image>=72&&!common,expanded=image>=36;
+ const index=common?(image-120)%12:lunch?(image-72)%12:expanded?(image-36)%12:image%4;
+ const atlas=common?`food-common-${Math.floor((image-120)/12)}`:lunch?`food-lunch-${Math.floor((image-72)/12)}`:expanded?`food-expanded-${Math.floor((image-36)/12)}`:`food-hd-${Math.floor(image/4)}`;
  return <div role="img" aria-label={foodName(food,language)} className="food-image" style={{clipPath:common?"inset(0 0 4% 0)":lunch?"inset(0 0 7% 0)":undefined,backgroundImage:`url(${basePath}/${atlas}.webp)`,backgroundSize:expanded?'400% 300%':'200% 200%',backgroundPosition:expanded?`${index%4/3*100}% ${(common?[0,50,100]:[0,46,92])[Math.floor(index/4)]}%`:`${index%2*100}% ${Math.floor(index/2)*100}%`}}/>
 }
 function MysteryArt({language}:{language:Language}){return <div className="mystery-art" role="img" aria-label={copy[language].mysteryAlt}>
