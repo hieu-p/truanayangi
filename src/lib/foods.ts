@@ -1,5 +1,5 @@
 import { priceRarity } from './case-mechanics';
-export type Food={customId?:string;name:string;sub:string;price:number;rarity:number;image:number;veg?:boolean;quip:string;atlas?:string;position?:string};
+export type Food={customId?:string;name:string;sub:string;price:number;rarity:number;image:number;veg?:boolean;quip:string;atlas?:string;position?:string;atlasSize?:string};
 // Approximate lunch portion prices in thousands of VND, not restaurant quotes.
 export const foods:Food[]=[
   {
@@ -843,5 +843,65 @@ export const foods:Food[]=[
   "sub": "Thịt & rau • Việt Nam",
   "quip": "Miến này không phải miếng mồi deadline.",
   "image": 131
+},
+{
+  customId: "main-com-dau-hu-mapo", name: "Cơm đậu hũ Mapo", sub: "Cơm & xôi", price: 80, image: 132,
+  quip: "", atlas: "food-chinese-0", position: "0% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-ga-kung-pao", name: "Cơm gà Kung Pao", sub: "Cơm & xôi", price: 95, image: 133,
+  quip: "", atlas: "food-chinese-0", position: "100% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-mi-dan-dan", name: "Mì Dan Dan Tứ Xuyên", sub: "Bún, phở & mì", price: 160, image: 134,
+  quip: "", atlas: "food-chinese-0", position: "0% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-chao-trung-bac-thao", name: "Cháo thịt nạc trứng bắc thảo", sub: "Lẩu & cháo", price: 50, image: 135,
+  quip: "", atlas: "food-chinese-0", position: "100% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-heo-jeyuk", name: "Cơm heo xào cay Jeyuk", sub: "Cơm & xôi", price: 100, image: 136,
+  quip: "", atlas: "food-korean-0", position: "0% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-ga-ham-sam", name: "Gà hầm sâm Samgyetang", sub: "Lẩu & cháo", price: 250, image: 137,
+  quip: "", atlas: "food-korean-0", position: "100% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-canh-suon-bo-galbitang", name: "Canh sườn bò Galbitang kèm cơm", sub: "Lẩu & cháo", price: 270, image: 138,
+  quip: "", atlas: "food-korean-0", position: "0% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-mi-kalguksu", name: "Mì Kalguksu hải sản", sub: "Bún, phở & mì", price: 150, image: 139,
+  quip: "", atlas: "food-korean-0", position: "100% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-omurice", name: "Cơm cuộn trứng Omurice", sub: "Cơm & xôi", price: 75, image: 140,
+  quip: "", atlas: "food-japanese-0", position: "0% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-heo-shogayaki", name: "Cơm heo xào gừng Shogayaki", sub: "Cơm & xôi", price: 80, image: 141,
+  quip: "", atlas: "food-japanese-0", position: "100% 0%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-hambagu", name: "Cơm thịt băm Hambagu", sub: "Cơm & xôi", price: 120, image: 142,
+  quip: "", atlas: "food-japanese-0", position: "0% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-com-ochazuke", name: "Cơm trà cá hồi Ochazuke", sub: "Cơm & xôi", price: 100, image: 143,
+  quip: "", atlas: "food-japanese-0", position: "100% 100%", atlasSize: "200% 200%"
+},
+{
+  customId: "main-masala-dosa", name: "Masala dosa", sub: "Bánh mì & cuốn", price: 115, image: 144, veg: true, quip: ""
+},
+{
+  customId: "main-chole-bhature", name: "Chole bhature", sub: "Bánh mì & cuốn", price: 165, image: 145, veg: true, quip: ""
+},
+{
+  customId: "main-palak-paneer", name: "Palak paneer kèm cơm", sub: "Cơm & xôi", price: 200, image: 146, veg: true, quip: ""
+},
+{
+  customId: "main-ga-tandoori", name: "Gà tandoori kèm naan", sub: "Nướng & chiên", price: 220, image: 147, quip: ""
 }
 ].map(food=>({...food,rarity:priceRarity(food.price)}));

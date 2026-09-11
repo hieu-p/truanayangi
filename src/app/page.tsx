@@ -20,6 +20,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const colors=['#4b69ff','#8847ff','#d32ce6','#eb4b4b','#e4ae39'];
 type RollType='main'|'drinks'|'snacks';
+const drinkFood=(id:string,name:string,sub:string,price:number,rarity:number,atlas:string,position:string):Food=>({customId:`drink-new-${id}`,name,sub,price,rarity,image:-1,veg:true,quip:'',atlas,position});
 const drinkFoods:Food[]=[
  {customId:'drink-sua-dau-nanh',name:'Sữa đậu nành',sub:'Giải khát',price:15,rarity:0,image:-1,veg:true,quip:'Mát lành, nhẹ bụng.',atlas:'drink-1',position:'66.6667% 100%'},
  {customId:'drink-nuoc-mia',name:'Nước mía',sub:'Giải khát',price:20,rarity:0,image:-1,veg:true,quip:'Ngọt mát tức thì.',atlas:'drink-1',position:'33.3333% 100%'},
@@ -45,6 +46,30 @@ const drinkFoods:Food[]=[
  {customId:'drink-matcha-latte',name:'Matcha latte',sub:'Trà sữa',price:40,rarity:2,image:-1,veg:true,quip:'Xanh nhưng không non.',atlas:'drink-0',position:'66.6667% 47%'},
  {customId:'drink-sinh-to-dau',name:'Sinh tố dâu',sub:'Sinh tố',price:40,rarity:2,image:-1,veg:true,quip:'Chua ngọt màu hồng.',atlas:'drink-1',position:'66.6667% 50%'},
  {customId:'drink-latte',name:'Latte',sub:'Cà phê',price:55,rarity:4,image:-1,veg:true,quip:'Mượt mà và tinh tế.',atlas:'drink-0',position:'100% 0%'},
+ drinkFood('americano','Americano','Cà phê',40,3,'drink-2','33.3333% 0%'),
+ drinkFood('espresso','Espresso','Cà phê',35,2,'drink-2','0% 0%'),
+ drinkFood('ca-phe-u-lanh','Cà phê ủ lạnh','Cà phê',45,3,'drink-2','100% 0%'),
+ drinkFood('cappuccino','Cappuccino','Cà phê',55,4,'drink-2','66.6667% 0%'),
+ drinkFood('ca-phe-muoi','Cà phê muối','Cà phê',30,1,'drink-2','33.3333% 47%'),
+ drinkFood('ca-phe-trung','Cà phê trứng','Cà phê',40,3,'drink-2','0% 47%'),
+ drinkFood('tra-sua-tra-xanh','Trà sữa trà xanh','Trà sữa',35,2,'drink-2','100% 47%'),
+ drinkFood('ca-phe-cot-dua','Cà phê cốt dừa','Cà phê',45,3,'drink-2','66.6667% 47%'),
+ drinkFood('tra-sua-lai','Trà sữa lài','Trà sữa',35,2,'drink-2','33.3333% 94%'),
+ drinkFood('tra-sua-khoai-mon','Trà sữa khoai môn','Trà sữa',35,2,'drink-2','0% 94%'),
+ drinkFood('sua-dau-xanh-cot-dua','Sữa đậu xanh cốt dừa','Sữa & sữa hạt',25,1,'drink-4','33.3333% 50%'),
+ drinkFood('sua-hat-sen-me-den','Sữa hạt sen mè đen','Sữa & sữa hạt',25,1,'drink-4','0% 50%'),
+ drinkFood('nuoc-ep-coc','Nước ép cóc','Nước ép',30,1,'drink-3','100% 98%'),
+ drinkFood('nuoc-ep-buoi','Nước ép bưởi','Nước ép',35,2,'drink-3','66.6667% 98%'),
+ drinkFood('cacao-sua','Cacao sữa','Matcha & cacao',30,1,'drink-3','66.6667% 48%'),
+ drinkFood('nuoc-ep-tao','Nước ép táo','Nước ép',35,2,'drink-3','33.3333% 98%'),
+ drinkFood('cacao-kem-muoi','Cacao kem muối','Matcha & cacao',40,3,'drink-3','100% 48%'),
+ drinkFood('nuoc-ep-ca-rot','Nước ép cà rốt','Nước ép',30,1,'drink-3','0% 98%'),
+ drinkFood('hojicha-latte','Hojicha latte','Matcha & cacao',45,3,'drink-3','0% 48%'),
+ drinkFood('sua-tuoi-tran-chau-duong-den','Sữa tươi trân châu đường đen','Sữa & sữa hạt',35,2,'drink-4','100% 0%'),
+ drinkFood('matcha-latte-dau','Matcha latte dâu','Matcha & cacao',45,3,'drink-3','33.3333% 48%'),
+ drinkFood('sinh-to-dua-gang','Sinh tố dưa gang','Sinh tố',30,1,'drink-4','66.6667% 0%'),
+ drinkFood('tra-xoai','Trà xoài','Trà & trà trái cây',35,2,'drink-3','66.6667% 0%'),
+ drinkFood('sinh-to-sapoche','Sinh tố sapoche','Sinh tố',35,2,'drink-4','33.3333% 0%'),
 ];
 const snackFood=(id:string,name:string,sub:string,price:number,rarity:number,atlas:string,position:string):Food=>({customId:`snack-${id}`,name,sub,price,rarity,image:-1,quip:'',atlas,position});
 const snackFoods:Food[]=[
@@ -156,7 +181,7 @@ function categoryName(food:Food,language:Language){
  return language==='vi'?'Món quốc tế':'International';
 }
 function FoodImage({food,language}:{food:Food;language:Language}){
- if(food.atlas)return <div className="food-image" role="img" aria-label={food.name} style={{backgroundImage:`url(${basePath}/${food.atlas}.webp)`,backgroundSize:'400% 300%',backgroundPosition:food.position}}/>;
+ if(food.atlas)return <div className="food-image" role="img" aria-label={food.name} style={{backgroundImage:`url(${basePath}/${food.atlas}.webp)`,backgroundSize:food.atlasSize??'400% 300%',backgroundPosition:food.position}}/>;
  if(food.customId)return <div className="food-image custom-food-art" role="img" aria-label={food.name}><Utensils size={64}/></div>;
  const common=food.image>=120,lunch=food.image>=72&&!common,expanded=food.image>=36;
  const index=common?(food.image-120)%12:lunch?(food.image-72)%12:expanded?(food.image-36)%12:food.image%4;
